@@ -1,3 +1,5 @@
+// Ref: https://github.com/komand/gosea
+
 package main
 
 import (
@@ -9,7 +11,10 @@ import (
 func main () {
   log.Print("wazzup!")
 
+  // openssl genrsa -out server.key 2048
   certPath := "server.pem"
+
+  // openssl req -new -x509 -sha256 -key server.key -out server.pem -days 3650
   keyPath := "server.key"
 
   // http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
