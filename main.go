@@ -16,7 +16,7 @@ func main () {
 	//    fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
   // })
 
-  handler := NewPing()
+  handler := handlers.NewPing()
   http.Handle("/ping", handler)
 
   //log.Fatal(http.ListenAndServe(":8080", nil))
