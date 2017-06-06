@@ -6,6 +6,7 @@ import (
   "log"
   "net/http"
   "github.com/danielhood/gosvctest/handlers"
+  "github.com/danielhood/gosvctest/security"
 )
 
 func main () {
@@ -22,11 +23,22 @@ func main () {
   // })
 
   pingHandler := handlers.NewPing()
+  tokenHandler := handlers.NewToken()
   testHandler := handlers.NewTest()
 
+  auth := security.NewAuthentication()
+
   http.Handle("/ping", pingHandler)
-  http.Handle("/test", testHandler)
+  http.Handle("/token", tokenHandler)
+  http.Handle("/test", AddMiddleware(testHandler, auth.Authenticate))
 
   //log.Fatal(http.ListenAndServe(":8080", nil))
   log.Fatal(http.ListenAndServeTLS(":8080", certPath, keyPath, nil))
+}
+
+func AddMiddleware(h http.Handler, middleware ...func(http.Handler) http.Handler) http.Handler {
+	for _, mw := range middleware {
+		h = mw(h)
+	}
+	return h
 }
